@@ -1,0 +1,53 @@
+= Buildr Package As Exe extension
+
+This buildr extension bridges the gap between your build and calling makensis when creating a .exe installer for Windows.
+
+== Prerequisites
+
+Makensis is a cross-platform software that creates Win32 installers, you can read more about it here:
+http://nsis.sourceforge.net/Main_Page
+
+You will need to install Makensis on your machine and point Buildr to your .nsi file.
+
+== How to use
+
+Here is a typical way to use this extension:
+define("foo", :group => "bar", :version => "1.0.0") do
+  package(:exe).with :nsi => _("my.nsi"), 
+  	:values => {"PRODUCT_VERSION" => project.version, "FOOBAR" => Dir.glob(_("target/generated/*")).first)}
+end
+
+The values are made available in the nsi script like this: ${PRODUCT_VERSION}
+
+In your nsi file, we recommend strongly that you use this instruction:
+  OutFile "${OUTPUT}"
+
+OUTPUT is a variable representing the name of the generated exe file. By mapping it to the package(:exe) file name, you ensure several things:
+  -the .exe file won't be recreated every time if it is there already (that's a given with Rake).
+  -the subsequent upload tasks will pick it up automatically.
+
+Not using this variable will likely break the build.
+
+To use a different file name for the .exe, you can of course do:
+package(:exe, :file => "some_file_name")
+
+== Install
+
+This project packages as a gem named buildr-package-as-exe, so look for the ruby gems installation steps.
+
+== License
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with this
+work for additional information regarding copyright ownership.  The ASF
+licenses this file to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+License for the specific language governing permissions and limitations under
+the License.
