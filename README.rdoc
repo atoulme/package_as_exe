@@ -12,6 +12,9 @@ You will need to install Makensis on your machine and point Buildr to your .nsi 
 == How to use
 
 Here is a typical way to use this extension:
+
+require "package_as_exe"
+
 define("foo", :group => "bar", :version => "1.0.0") do
   package(:exe).with :nsi => _("my.nsi"), 
   	:values => {"PRODUCT_VERSION" => project.version, "FOOBAR" => Dir.glob(_("target/generated/*")).first)}
